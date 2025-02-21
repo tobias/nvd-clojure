@@ -30,7 +30,7 @@
   (:import
    (java.io File)
    (org.owasp.dependencycheck Engine)
-   (org.owasp.dependencycheck.utils Settings Settings$KEYS)))
+   (org.owasp.dependencycheck.utils Downloader Settings Settings$KEYS)))
 
 (def ^:private string-mappings
   {Settings$KEYS/ANALYZER_NEXUS_URL        [:analyzer :nexus-url]
@@ -209,6 +209,7 @@ You can pass an empty string for an .edn file to be automatically created."
 
         (.setString settings Settings$KEYS/NVD_API_KEY api-key)))
 
+    (.configure (Downloader/getInstance) settings)
     (-> project
         (assoc-in [:nvd :data-directory] (.getDataDirectory settings))
         (assoc :engine      (Engine. settings)
